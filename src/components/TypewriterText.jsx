@@ -1,29 +1,39 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 
 const TypewriterText = ({ text, className = "", delay = 0 }) => {
   const [displayText, setDisplayText] = useState('')
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [startTyping, setStartTyping] = useState(false)
+  const timeoutRef = useRef(null)
 
   useEffect(() => {
-    const startDelay = setTimeout(() => {
-      setStartTyping(true)
+    // Nettoyer les timeouts précédents
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    // Démarrer après le délai initial
+    const startTimeout = setTimeout(() => {
+      let currentIndex = 0
+      setDisplayText('')
+
+      const typeNextChar = () => {
+        if (currentIndex < text.length) {
+          setDisplayText(text.slice(0, currentIndex + 1))
+          currentIndex++
+          timeoutRef.current = setTimeout(typeNextChar, 100)
+        }
+      }
+
+      typeNextChar()
     }, delay)
 
-    return () => clearTimeout(startDelay)
-  }, [delay])
-
-  useEffect(() => {
-    if (startTyping && currentIndex < text.length) {
-      const timeout = setTimeout(() => {
-        setDisplayText(prev => prev + text[currentIndex])
-        setCurrentIndex(prev => prev + 1)
-      }, 100)
-
-      return () => clearTimeout(timeout)
+    return () => {
+      clearTimeout(startTimeout)
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
     }
-  }, [currentIndex, text, startTyping])
+  }, [text, delay])
 
   return (
     <motion.span

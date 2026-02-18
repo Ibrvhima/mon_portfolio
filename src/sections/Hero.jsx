@@ -32,10 +32,11 @@ const Hero = () => {
         <div className="space-y-4 px-4 pt-16">
           <div className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-blue-200 font-bold break-words">
             <TypewriterText 
-              text="Développeur Fullstack Junior" 
+              text="Dév" 
               className="font-bold leading-tight"
               delay={200}
             />
+            <span className="text-blue-200 font-bold">eloppeur Fullstack Junior</span>
           </div>
         </div>
 
