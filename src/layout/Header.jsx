@@ -6,8 +6,7 @@ import { animations } from "../styles/theme";
 
 const navLinks = [
   { name: "Home", href: "#home" },
-  { name: "About", href: "#about" },
-  { name: "Skills", href: "#skills" },
+  { name: "Skills", href: "#about" },
   { name: "Projects", href: "#projects" },
   { name: "GitHub", href: "#github" },
   { name: "Timeline", href: "#timeline" },
@@ -51,26 +50,26 @@ const Header = () => {
           : "bg-transparent"
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-6 md:px-8 lg:px-12">
+      <nav className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <motion.a
             href="#home"
             whileHover={{ scale: 1.05 }}
-            className="text-2xl font-bold bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent"
+            className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent"
           >
             Ibrahima
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center space-x-4 lg:space-x-8">
             {navLinks.map((link) => (
               <motion.a
                 key={link.name}
                 href={link.href}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className={`relative px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                className={`relative px-3 lg:px-4 py-2 text-xs sm:text-sm font-medium transition-all duration-300 ${
                   activeSection === link.href.replace("#", "")
                     ? "text-blue-700 dark:text-blue-400"
                     : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400"
@@ -89,13 +88,13 @@ const Header = () => {
           </div>
 
           {/* Theme Toggle & Mobile Menu */}
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Theme Toggle */}
             <motion.button
               whileHover={{ scale: 1.1, rotate: 180 }}
               whileTap={{ scale: 0.9 }}
               onClick={toggleTheme}
-              className="p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+              className="p-2 sm:p-2 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
               aria-label="Toggle theme"
             >
               <AnimatePresence mode="wait">
@@ -128,7 +127,7 @@ const Header = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden p-2 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+              className="md:hidden p-3 sm:p-3 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors z-50"
               aria-label="Toggle menu"
             >
               <AnimatePresence mode="wait">
@@ -162,38 +161,41 @@ const Header = () => {
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 bg-black/50 z-40 md:hidden"
+              onClick={() => setIsOpen(false)}
             >
               <motion.div
-                initial={{ y: -20 }}
-                animate={{ y: 0 }}
-                exit={{ y: -20 }}
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
                 transition={{ duration: 0.3 }}
-                className="py-4 space-y-2 bg-white/95 dark:bg-gray-900/95 backdrop-blur-lg rounded-2xl mt-4 border border-gray-200/20"
+                className="absolute right-0 top-0 h-full w-80 max-w-full bg-white dark:bg-gray-900 shadow-xl"
+                onClick={(e) => e.stopPropagation()}
               >
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.name}
-                    href={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    whileHover={{ scale: 1.02, x: 5 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => setIsOpen(false)}
-                    className={`block px-6 py-3 text-sm font-medium transition-all duration-300 ${
-                      activeSection === link.href.replace("#", "")
-                        ? "text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-600"
-                        : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800"
-                    }`}
-                  >
-                    {link.name}
-                  </motion.a>
-                ))}
+                <div className="p-6">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">Menu</h3>
+                  {navLinks.map((link, index) => (
+                    <motion.a
+                      key={link.name}
+                      href={link.href}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      onClick={() => setIsOpen(false)}
+                      className={`block px-4 py-3 text-sm font-medium rounded-lg transition-all duration-300 ${
+                        activeSection === link.href.replace("#", "")
+                          ? "text-blue-700 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20"
+                          : "text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                      }`}
+                    >
+                      {link.name}
+                    </motion.a>
+                  ))}
+                </div>
               </motion.div>
             </motion.div>
           )}

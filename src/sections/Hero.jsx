@@ -29,11 +29,11 @@ const Hero = () => {
         className="relative z-20 text-center max-w-4xl space-y-8"
       >
         {/* Titre avec effet de typing */}
-        <div className="space-y-4 px-4 pt-12">
-          <div className="text-2xl sm:text-4xl md:text-5xl text-blue-200 font-bold">
+        <div className="space-y-4 px-4 pt-16">
+          <div className="text-xl sm:text-3xl md:text-4xl lg:text-5xl text-blue-200 font-bold break-words">
             <TypewriterText 
               text="Développeur Fullstack Junior" 
-              className="font-bold"
+              className="font-bold leading-tight"
               delay={200}
             />
           </div>
@@ -44,7 +44,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="text-base sm:text-lg md:text-xl text-blue-200 max-w-2xl mx-auto leading-relaxed px-4"
+          className="text-sm sm:text-base md:text-lg lg:text-xl text-blue-200 max-w-2xl mx-auto leading-relaxed px-4 break-words"
         >
           Passionné, je crée des sites et applications web modernes et performants. 
           J'aime transformer des idées en interfaces interactives avec 

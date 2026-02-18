@@ -4,8 +4,7 @@ import Header from "./layout/Header";
 import Footer from "./layout/Footer";
 
 import Hero from "./sections/Hero";
-import About from "./sections/About";
-import Skills from "./sections/Skills";
+import Skills from "./sections/About";
 import Projects from "./sections/Projects";
 import GitHub from "./sections/GitHub";
 import Timeline from "./sections/Timeline";
@@ -18,7 +17,6 @@ function App() {
 
       <main>
         <Hero />
-        <About />
         <Skills />
         <Projects />
         <GitHub />

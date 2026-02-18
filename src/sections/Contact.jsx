@@ -29,26 +29,35 @@ const Contact = () => {
         throw new Error("EmailJS non configuré. Veuillez configurer email-config.js");
       }
 
+      console.log("Configuration EmailJS:", window.EMAILJS_CONFIG);
+
       // Initialiser EmailJS
       emailjs.init(window.EMAILJS_CONFIG.PUBLIC_KEY);
       
+      // Préparer les données
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+        reply_to: formData.email
+      };
+
+      console.log("Envoi des données:", templateParams);
+
       // Envoyer l'email
-      await emailjs.send(
+      const response = await emailjs.send(
         window.EMAILJS_CONFIG.SERVICE_ID,
         window.EMAILJS_CONFIG.TEMPLATE_ID,
-        {
-          name: formData.name,
-          email: formData.email,
-          message: formData.message,
-          reply_to: formData.email
-        }
+        templateParams
       );
+
+      console.log("Réponse EmailJS:", response);
 
       // Si tout va bien
       setSubmitted(true);
       setFormData({ name: "", email: "", message: "" });
     } catch (error) {
-      console.error("Erreur EmailJS:", error);
+      console.error("Erreur EmailJS complète:", error);
       setErrorMessage(error.message || "Une erreur est survenue lors de l'envoi. Réessayez.");
     } finally {
       setSending(false);
