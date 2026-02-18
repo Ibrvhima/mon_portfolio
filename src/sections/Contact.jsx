@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { FaUser, FaEnvelope, FaComment, FaAddressCard, FaPhone, FaGlobe, FaFilePdf } from "react-icons/fa";
 import { FaGithub, FaLinkedin, FaFacebook, FaWhatsapp } from "react-icons/fa";
+import emailjs from '@emailjs/browser';
 
 const Contact = () => {
-  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
   const [sending, setSending] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -19,41 +24,62 @@ const Contact = () => {
     setErrorMessage("");
 
     try {
-      // Simuler un envoi
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Vérifier si EmailJS est configuré
+      if (!window.EMAILJS_CONFIG) {
+        throw new Error("EmailJS non configuré. Veuillez configurer email-config.js");
+      }
+
+      // Initialiser EmailJS
+      emailjs.init(window.EMAILJS_CONFIG.PUBLIC_KEY);
+      
+      // Envoyer l'email
+      await emailjs.send(
+        window.EMAILJS_CONFIG.SERVICE_ID,
+        window.EMAILJS_CONFIG.TEMPLATE_ID,
+        {
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+          reply_to: formData.email
+        }
+      );
 
       // Si tout va bien
       setSubmitted(true);
       setFormData({ name: "", email: "", message: "" });
-    // eslint-disable-next-line no-unused-vars
-    } catch (_err) {
-      // ESLint ne se plaindra pas de "_err" non utilisé
-      setErrorMessage("Une erreur est survenue. Réessayez.");
+    } catch (error) {
+      console.error("Erreur EmailJS:", error);
+      setErrorMessage(error.message || "Une erreur est survenue lors de l'envoi. Réessayez.");
     } finally {
       setSending(false);
     }
   };
 
   return (
-    <section id="contact" className="relative px-6 md:px-16 lg:px-24 py-24">
-      {/* Dégradé animé en arrière-plan */}
-      <div className="absolute inset-0 bg-linear-to-br from-blue-600/40 via-white/30 to-blue-400/30 animate-gradient-x pointer-events-none"></div>
+    <section id="contact" className="relative px-6 md:px-16 lg:px-24 py-24 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 overflow-hidden">
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: "linear-gradient(90deg, #64748B 1px, transparent 1px), linear-gradient(180deg, #64748B 1px, transparent 1px)",
+          backgroundSize: '30px 30px'
+        }} />
+      </div>
 
       <div className="relative z-10 max-w-6xl mx-auto fade-in-up">
         {/* Titre */}
-        <div className="text-center mb-12 fade-in-down">
-          <h2 className="text-4xl md:text-5xl font-extrabold text-blue-600">
+        <div className="relative z-10 text-center mb-12 fade-in-down">
+          <h2 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-blue-700 to-blue-600 bg-clip-text text-transparent">
             Contactez-moi
           </h2>
           <div className="w-24 h-1 bg-blue-600 mx-auto rounded-full mt-3"></div>
-          <p className="text-gray-600 text-lg mt-4 max-w-2xl mx-auto">
-            Une question, un projet ou une idée ? Écrivez-moi directement depuis ce formulaire.
+          <p className="text-gray-600 dark:text-gray-300 text-lg mt-4 max-w-2xl mx-auto">
+            Une question, un projet ou une idée ? Écrivez-moi directement depuis
+            ce formulaire.
           </p>
         </div>
 
         {/* Card parente */}
         <div className="bg-gray-200/80 backdrop-blur-lg rounded-2xl shadow-xl overflow-hidden grid grid-cols-1 gap-6 p-4 md:grid-cols-2 md:gap-8 md:p-8 w-full max-w-full">
-
           {/* Card Formulaire */}
           <div className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition fade-in-up">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -115,13 +141,17 @@ const Contact = () => {
                   {sending ? "Envoi..." : "Envoyer"}
                 </button>
 
-                {submitted && <p className="text-green-600 font-medium mt-2 animate-fade-in">
-                  Merci ! Votre message a été envoyé.
-                </p>}
+                {submitted && (
+                  <p className="text-green-600 font-medium mt-2 animate-fade-in">
+                    Merci ! Votre message a été envoyé.
+                  </p>
+                )}
 
-                {errorMessage && <p className="text-red-600 font-medium mt-2 animate-fade-in">
-                  {errorMessage}
-                </p>}
+                {errorMessage && (
+                  <p className="text-red-600 font-medium mt-2 animate-fade-in">
+                    {errorMessage}
+                  </p>
+                )}
               </div>
             </form>
           </div>
@@ -154,23 +184,43 @@ const Contact = () => {
 
             <div className="flex items-center gap-3 text-gray-700 mb-4">
               <FaFilePdf className="text-red-600" />
-              <a href="assets/cv.pdf" download className="hover:underline">
+              <a href="/assets/cv.pdf" download className="hover:underline">
                 Télécharger mon CV
               </a>
             </div>
 
             {/* Réseaux sociaux */}
             <div className="flex gap-6 mt-6">
-              <a href="https://github.com/Ibrvhima" target="_blank" rel="noreferrer" className="text-gray-700 hover:text-black transition text-2xl">
+              <a
+                href="https://github.com/Ibrvhima"
+                target="_blank"
+                rel="noreferrer"
+                className="text-gray-700 hover:text-black transition text-2xl"
+              >
                 <FaGithub />
               </a>
-              <a href="https://www.linkedin.com/in/ibrahima-diallo-749a8a281/" target="_blank" rel="noreferrer" className="text-blue-600 hover:text-blue-800 transition text-2xl">
+              <a
+                href="https://www.linkedin.com/in/ibrahima-diallo-749a8a281/"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-600 hover:text-blue-800 transition text-2xl"
+              >
                 <FaLinkedin />
               </a>
-              <a href="https://facebook.com/votreprofil" target="_blank" rel="noreferrer" className="text-blue-500 hover:text-sky-700 transition text-2xl">
+              <a
+                href="https://facebook.com/votreprofil"
+                target="_blank"
+                rel="noreferrer"
+                className="text-blue-500 hover:text-sky-700 transition text-2xl"
+              >
                 <FaFacebook />
               </a>
-              <a href="https://wa.me/224611537838" target="_blank" rel="noreferrer" className="text-green-500 hover:text-green-700 transition text-2xl">
+              <a
+                href="https://wa.me/224611537838"
+                target="_blank"
+                rel="noreferrer"
+                className="text-green-500 hover:text-green-700 transition text-2xl"
+              >
                 <FaWhatsapp />
               </a>
             </div>

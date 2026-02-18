@@ -44,20 +44,27 @@ const Experience = () => {
   return (
     <section
       id="experience"
-      className="min-h-screen px-6 md:px-16 lg:px-24 py-16 text-white bg-linear-to-br from-slate-800 via-gray-900 to-gray-950 dark:from-gray-800 dark:via-gray-900 dark:to-gray-950"
+      className="min-h-screen px-6 md:px-16 lg:px-24 py-16 text-white bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 overflow-hidden"
     >
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0" style={{
+          backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 20px, #64748B 20px, #64748B 21px)",
+          backgroundSize: '100% 21px'
+        }} />
+      </div>
       {/* Titre */}
-      <div className="max-w-4xl mx-auto text-center mb-12" data-aos="fade-down">
-        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-linear-to-r from-blue-400 to-purple-500">
+      <div className="relative z-10 max-w-4xl mx-auto text-center mb-12" data-aos="fade-down">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-700 to-blue-600">
           Mon Expérience
         </h2>
-        <p className="text-gray-300 text-lg">
-          Voici un aperçu de mon parcours professionnel et des projets sur lesquels j’ai travaillé.
+        <p className="text-gray-600 dark:text-gray-300 text-lg">
+          Voici un aperçu de mon parcours professionnel et des projets sur lesquels j'ai travaillé.
         </p>
       </div>
 
       {/* Timeline */}
-      <div className="relative border-l-2 border-gray-600 ml-4 space-y-12">
+      <div className="relative z-10 border-l-2 border-blue-600 ml-4 space-y-12">
         {experiences.map((exp, index) => (
           <div
             key={exp.id}
@@ -71,9 +78,9 @@ const Experience = () => {
               {exp.icon}
             </div>
             <div className="ml-12">
-              <h3 className="text-2xl font-bold">{exp.title}</h3>
-              <p className="text-gray-400 text-sm">{exp.period}</p>
-              <p className="text-gray-300 mt-2">{exp.description}</p>
+              <h3 className="text-2xl font-bold text-gray-800 dark:text-white">{exp.title}</h3>
+              <p className="text-gray-500 dark:text-gray-400 text-sm">{exp.period}</p>
+              <p className="text-gray-600 dark:text-gray-300 mt-2">{exp.description}</p>
             </div>
           </div>
         ))}
